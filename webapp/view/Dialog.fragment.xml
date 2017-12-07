@@ -1,0 +1,20 @@
+<core:FragmentDefinition
+		    xmlns:core="sap.ui.core"
+		    xmlns:f="sap.ui.layout.form"
+		    xmlns="sap.m">
+        
+	<Dialog title="Диалоговое окно в фрагменте">
+		<beginButton>
+			<Button press="onCloseDialog" text="{i18n>dialogClose}"/>
+		</beginButton>
+		<content>
+			<f:SimpleForm >
+				<f:content>
+					<Label text="Имя"/>
+					<Input id="idInput"/>
+				</f:content>
+			</f:SimpleForm>
+		</content>
+	</Dialog>
+	
+</core:FragmentDefinition>
