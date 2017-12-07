@@ -34,6 +34,7 @@ sap.ui.define([
 		onCloseDialog: function() {
 			this._getDialog().close();
 
+            //обращаемся к полю ввода, расположенного в фрагменте
 			var oInput = sap.ui.core.Fragment.byId("idFrag", "idInput");
 			var oText = this.getView().byId("idText");
 
