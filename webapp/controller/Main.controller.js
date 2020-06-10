@@ -1,13 +1,15 @@
 sap.ui.define([
-	"sap/ui/core/mvc/Controller"
-], function(Controller) {
+	"sap/ui/core/mvc/Controller",
+	"sap/ui/core/Fragment",
+	"sap/ui/model/resource/ResourceModel"
+], function (Controller, Fragment, ResourceModel) {
 	"use strict";
 
 	return Controller.extend("sap.training.controller.Main", {
 
-		onInit: function() {
+		onInit: function () {
 			//так как подключаем не shell, создадим модель i18n
-			var oResourceModel = new sap.ui.model.resource.ResourceModel({
+			var oResourceModel = new ResourceModel({
 				bundleName: "sap.training.i18n.i18n"
 			});
 
@@ -16,29 +18,45 @@ sap.ui.define([
 
 		},
 
-		_getDialog: function() {
-			if (!this._oDialog) {
-				//создаем фрагмент
-				this._oDialog = sap.ui.xmlfragment("idFrag", "sap.training.view.Dialog", this);
+		_getDialog: function () {
+			var promise = new Promise(function (resolve, reject) {
+				if (!this._oDialog) {
+					Fragment.load({
+						id: "idFrag",
+						type: "XML",
+						name: "sap.training.view.Dialog",
+						controller: this
+					}).then(function (oDialog) {
+						resolve(oDialog);
+					});
+				} else {
+					resolve(this._oDialog);
+				}
+			}.bind(this));
 
+			return promise;
+		},
+
+		onOpenDialog: function () {
+			this._getDialog().then(function (oDialog) {
+				this._oDialog = oDialog;
 				//Добавляем зависимости для корректного отображения модели
 				this.getView().addDependent(this._oDialog);
-			}
-			return this._oDialog;
+				this._oDialog.open();
+			}.bind(this));
 		},
 
-		onOpenDialog: function() {
-			this._getDialog().open();
-		},
+		onCloseDialog: function () {
+			this._getDialog().then(function (oDialog) {
+				this._oDialog.close();
 
-		onCloseDialog: function() {
-			this._getDialog().close();
+				//обращаемся к полю ввода, расположенного в фрагменте
+				var oInput = Fragment.byId("idFrag", "idInput");
+				var oText = this.getView().byId("idText");
 
-            //обращаемся к полю ввода, расположенного в фрагменте
-			var oInput = sap.ui.core.Fragment.byId("idFrag", "idInput");
-			var oText = this.getView().byId("idText");
+				oText.setText("Привет " + oInput.getValue());
+			}.bind(this));
 
-			oText.setText("Привет " + oInput.getValue());
 		}
 
 	});
