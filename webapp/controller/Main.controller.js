@@ -21,11 +21,12 @@ sap.ui.define([
 		_getDialog: function () {
 			var promise = new Promise(function (resolve, reject) {
 				if (!this._oDialog) {
+					//Зугразим фрагмент
 					Fragment.load({
-						id: "idFrag",
-						type: "XML",
-						name: "sap.training.view.Dialog",
-						controller: this
+						id: "idFrag", //id
+						type: "XML", // тип фрагмента
+						name: "sap.training.view.Dialog", // путь до фрагмента
+						controller: this //укажем контроллер, чтобы правильно отрабатывала кнопка "закрыть в диалоговом окне"
 					}).then(function (oDialog) {
 						resolve(oDialog);
 					});
@@ -42,13 +43,13 @@ sap.ui.define([
 				this._oDialog = oDialog;
 				//Добавляем зависимости для корректного отображения модели
 				this.getView().addDependent(this._oDialog);
-				this._oDialog.open();
+				this._oDialog.open(); // откроем
 			}.bind(this));
 		},
 
 		onCloseDialog: function () {
 			this._getDialog().then(function (oDialog) {
-				this._oDialog.close();
+				this._oDialog.close(); //закроем
 
 				//обращаемся к полю ввода, расположенного в фрагменте
 				var oInput = Fragment.byId("idFrag", "idInput");
