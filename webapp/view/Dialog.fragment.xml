@@ -8,7 +8,7 @@
 			<Button press="onCloseDialog" text="{i18n>dialogClose}"/>
 		</beginButton>
 		<content>
-			<f:SimpleForm >
+			<f:SimpleForm title="SimpleForm">
 				<f:content>
 					<Label text="Имя"/>
 					<Input id="idInput"/>
